@@ -47,7 +47,7 @@ def clear_buffer(dut: DeviceAdapter) -> None:
         dut.disconnect()
 
 
-def test_upgrade_with_confirm(dut: DeviceAdapter, shell: Shell, mcumgr: MCUmgr):
+def upgrade_with_confirm(dut: DeviceAdapter, shell: Shell, mcumgr: MCUmgr, boot_output: str):
     """
     Verify that the application can be updated
     1) Device flashed with MCUboot and an application that contains SMP server
@@ -78,7 +78,7 @@ def test_upgrade_with_confirm(dut: DeviceAdapter, shell: Shell, mcumgr: MCUmgr):
     output = dut.readlines_until('Launching primary slot application')
     match_lines(output, [
         'Swap type: test',
-        'Starting swap using move algorithm'
+        boot_output
     ])
     logger.info('Verify new APP is booted')
     check_with_shell_command(shell, new_version, swap_type='test')
@@ -92,13 +92,13 @@ def test_upgrade_with_confirm(dut: DeviceAdapter, shell: Shell, mcumgr: MCUmgr):
     dut.connect()
     output = dut.readlines_until('Launching primary slot application')
     match_no_lines(output, [
-        'Starting swap using move algorithm'
+        boot_output
     ])
     logger.info('Verify new APP is still booted')
     check_with_shell_command(shell, new_version)
 
 
-def test_upgrade_with_revert(dut: DeviceAdapter, shell: Shell, mcumgr: MCUmgr):
+def upgrade_with_revert(dut: DeviceAdapter, shell: Shell, mcumgr: MCUmgr, boot_output):
     """
     Verify that MCUboot will roll back an image that is not confirmed
     1) Device flashed with MCUboot and an application that contains SMP server
@@ -133,7 +133,7 @@ def test_upgrade_with_revert(dut: DeviceAdapter, shell: Shell, mcumgr: MCUmgr):
     output = dut.readlines_until('Launching primary slot application')
     match_lines(output, [
         'Swap type: test',
-        'Starting swap using move algorithm'
+        boot_output
     ])
     logger.info('Verify new APP is booted')
     check_with_shell_command(shell, new_version, swap_type='test')
@@ -147,19 +147,13 @@ def test_upgrade_with_revert(dut: DeviceAdapter, shell: Shell, mcumgr: MCUmgr):
     output = dut.readlines_until('Launching primary slot application')
     match_lines(output, [
         'Swap type: revert',
-        'Starting swap using move algorithm'
+        boot_output
     ])
     logger.info('Verify that MCUboot reverts update')
     check_with_shell_command(shell, origin_version)
 
 
-@pytest.mark.parametrize(
-    'key_file', [None, 'root-ec-p256.pem'],
-    ids=[
-        'no_key',
-        'invalid_key'
-    ])
-def test_upgrade_signature(dut: DeviceAdapter, shell: Shell, mcumgr: MCUmgr, key_file):
+def upgrade_signature(dut: DeviceAdapter, shell: Shell, mcumgr: MCUmgr, key_file, boot_output: str):
     """
     Verify that the application is not updated when app is not signed or signed with invalid key
     1) Device flashed with MCUboot and an application that contains SMP server
@@ -207,5 +201,5 @@ def test_upgrade_signature(dut: DeviceAdapter, shell: Shell, mcumgr: MCUmgr, key
 
     dut.connect()
     output = dut.readlines_until('Launching primary slot application')
-    match_no_lines(output, ['Starting swap using move algorithm'])
+    match_no_lines(output, [boot_output])
     match_lines(output, ['Image in the secondary slot is not valid'])
