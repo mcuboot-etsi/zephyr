@@ -34,6 +34,17 @@ tests:
         - "pytest/test_upgrade_scratch.py"
     extra_args:
       - mcuboot_CONFIG_BOOT_SWAP_USING_SCRATCH=y
+  boot.with_mcumgr.test_upgrade_ram:
+    tags:
+      - pytest
+      - mcuboot
+      - mcumgr
+    harness: pytest
+    harness_config:
+      pytest_root:
+        - "pytest/test_upgrade_ram.py"
+    extra_args:
+      - mcuboot_CONFIG_BOOT_RAM_LOAD=y
 
   boot.with_mcumgr.test_downgrade_prevention:
     tags:

@@ -18,6 +18,7 @@ def west_sign_with_imgtool(
         output_bin: Path | None = None,
         key_file: Path | None = None,
         version: str | None = None,
+        load_addr: int | None = None,
         timeout: int = 10
 ):
     """Wrapper method for `west sign -t imgtool` comamnd"""
@@ -35,7 +36,8 @@ def west_sign_with_imgtool(
         command_extra_args.extend(['--key', str(key_file)])
     if version:
         command_extra_args.extend(['--version', version])
-
+    if load_addr:
+        command_extra_args.extend(['--load_addr', load_addr])
     if command_extra_args:
         command.append('--')
         command.extend(command_extra_args)
