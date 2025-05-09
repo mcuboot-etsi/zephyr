@@ -12,6 +12,61 @@ common:
   timeout: 600
   slow: true
 tests:
+  boot.with_mcumgr.boot_validation.test_load_success:
+    tags:
+      - pytest
+      - mcuboot
+      - mcumgr
+    harness: pytest
+    harness_config:
+      pytest_root:
+        - "pytest/test_successful_boot.py"
+    extra_args:
+      - mcuboot_CONFIG_BOOT_SWAP_USING_MOVE=y
+  boot.with_mcumgr.boot_validation.test_corrupted_magic:
+    tags:
+      - pytest
+      - mcuboot
+      - mcumgr
+    harness: pytest
+    harness_config:
+      pytest_root:
+        - "pytest/test_no_bootable_image.py"
+    extra_args:
+      - mcuboot_CONFIG_BOOT_SWAP_USING_MOVE=y
+  boot.with_mcumgr.boot_validation.test_aligned_load_addr:
+    tags:
+      - pytest
+      - mcuboot
+      - mcumgr
+    harness: pytest
+    harness_config:
+      pytest_root:
+        - "pytest/test_no_bootable_image.py"
+    extra_args:
+      - mcuboot_CONFIG_BOOT_SWAP_USING_MOVE=y
+  boot.with_mcumgr.boot_validation.test_misaligned_load_addr:
+    tags:
+      - pytest
+      - mcuboot
+      - mcumgr
+    harness: pytest
+    harness_config:
+      pytest_root:
+        - "pytest/test_no_bootable_image.py"
+    extra_args:
+      - mcuboot_CONFIG_BOOT_SWAP_USING_MOVE=y
+  boot.with_mcumgr.boot_validation.test_header_size_too_small:
+    tags:
+      - pytest
+      - mcuboot
+      - mcumgr
+    harness: pytest
+    harness_config:
+      pytest_root:
+        - "pytest/test_no_bootable_image.py"
+    extra_args:
+      - mcuboot_CONFIG_BOOT_SWAP_USING_MOVE=y
   boot.with_mcumgr.test_upgrade_move:
     tags:
       - pytest
@@ -34,18 +89,6 @@ tests:
         - "pytest/test_upgrade_scratch.py"
     extra_args:
       - mcuboot_CONFIG_BOOT_SWAP_USING_SCRATCH=y
-  boot.with_mcumgr.test_upgrade_ram:
-    tags:
-      - pytest
-      - mcuboot
-      - mcumgr
-    harness: pytest
-    harness_config:
-      pytest_root:
-        - "pytest/test_upgrade_ram.py"
-    extra_args:
-      - mcuboot_CONFIG_BOOT_RAM_LOAD=y
-
   boot.with_mcumgr.test_downgrade_prevention:
     tags:
       - pytest

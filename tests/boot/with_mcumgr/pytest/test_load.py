@@ -5,28 +5,25 @@ import logging
 
 from pathlib import Path
 from twister_harness import DeviceAdapter, Shell, MCUmgr
-from west_sign_wrapper import west_sign_with_imgtool
 from utils import (
-    find_in_config,
-    match_lines,
     match_no_lines,
-    check_with_shell_command,
-    check_with_mcumgr_command,
+    check_with_shell_command
 )
 
 logger = logging.getLogger(__name__)
 
 # Test that the primary image boots without a swap
 
-def test_success_load(dut: DeviceAdapter, shell: Shell, mcumgr: MCUmgr, boot_output: str):
+def success_load_no_swap(dut: DeviceAdapter, shell: Shell, mcumgr: MCUmgr):
     mcumgr.reset_device()
 
     dut.connect()
     output = dut.readlines_until('Launching primary slot application')
     match_no_lines(output, [
-        boot_output
+        'Starting swap using move algorithm'
     ])
-    logger.info('Verify new APP is still booted')
-    check_with_shell_command(shell, new_version)
+    logger.info('Verify original APP is still booted')
+    check_with_shell_command(shell, '0.0.0+0')
 
-# 
+def test_success_load(dut: DeviceAdapter, shell: Shell, mcumgr: MCUmgr):
+    success_load_no_swap(dut, shell, mcumgr)

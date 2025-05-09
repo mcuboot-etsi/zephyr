@@ -34,6 +34,7 @@ def upgrade_with_confirm(dut: DeviceAdapter, shell: Shell, mcumgr: MCUmgr, boot_
     7) Confirm the image using mcumgr
     8) Restart the device, and verify that the new application is still booted
     """
+    logger.info("TEST: Upgrade with Confirm")
     logger.info('Prepare upgrade image')
     new_version = '0.0.2+0'
     image_to_test = create_signed_image(dut.device_config.build_dir,
@@ -85,6 +86,7 @@ def upgrade_with_revert(dut: DeviceAdapter, shell: Shell, mcumgr: MCUmgr, boot_o
     7) Reset the device without confirming the image
     8) Verify that MCUboot reverts update
     """
+    logger.info("TEST: Upgrade with Revert")
     origin_version = find_in_config(
         Path(dut.device_config.app_build_dir) / 'zephyr' / '.config',
         'CONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION'
@@ -140,6 +142,7 @@ def upgrade_signature(dut: DeviceAdapter, shell: Shell, mcumgr: MCUmgr, key_file
     4) Flag the application update in slot 1 as 'pending' by using mcumgr 'test'
     5) Restart the device, verify that swap is not started
     """
+    logger.info("TEST: Upgrade with invalid or no key")
     if key_file:
         origin_key_file = find_in_config(
             Path(dut.device_config.build_dir) / 'mcuboot' / 'zephyr' / '.config',

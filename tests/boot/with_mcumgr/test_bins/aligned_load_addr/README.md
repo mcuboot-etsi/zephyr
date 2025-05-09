@@ -1,0 +1,1 @@
+Test that if the load_addr is word-aligned but not within the RAM memory space, MCUboot fails to boot

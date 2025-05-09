@@ -9,6 +9,7 @@ import logging
 from pathlib import Path
 from twister_harness import DeviceAdapter, Shell, MCUmgr
 from test_upgrade import upgrade_with_confirm, upgrade_with_revert, upgrade_signature
+from zephyr.tests.boot.with_mcumgr.pytest.test_load import success_load_no_swap
 
 move_output = 'Starting swap using move algorithm'
 

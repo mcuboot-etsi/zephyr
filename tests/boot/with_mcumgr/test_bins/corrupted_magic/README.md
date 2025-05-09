@@ -1,0 +1,1 @@
+Test that if the image magic is wrong (4DB8F396 instead of 3DB8F396), MCUboot finds no bootable image in the active slot
